@@ -1,4 +1,4 @@
-# FasTrakCrack
+# OpenFasTrak
 
 ## Helpful Reading
 * [Title 21 Public FasTrak Specification](http://www.dot.ca.gov/hq/traffops/itsproj/Title_21/title21_index.htm)
