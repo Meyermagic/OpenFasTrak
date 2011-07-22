@@ -1,6 +1,6 @@
 # OpenFasTrak
 
-OpenFasTrak is open-source Gnuradio-based reimplementation of the FasTrak protocol. FasTrak is a popular electronic toll collection system used in California. East Coasters might be more familiar with E-ZPass, a similar system.
+OpenFasTrak is open-source Gnuradio-based reimplementation of the FasTrak protocol. FasTrak is a popular electronic toll collection system used in California (East Coasters might be more familiar with E-ZPass, a similar system used of the East Coast).
 
 FasTrak is [notably insecure](http://rdist.root.org/2008/08/07/fastrak-talk-summary-and-slides/), and communication protocol is very simple, and publicly documented in the [Title 21 Public FasTrak Specification](http://www.dot.ca.gov/hq/traffops/itsproj/Title_21/title21_index.htm).
 
