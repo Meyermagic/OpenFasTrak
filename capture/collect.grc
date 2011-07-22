@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Thu Jul 21 17:36:54 2011</timestamp>
+  <timestamp>Thu Jul 21 21:15:01 2011</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -57,6 +57,173 @@
     </param>
   </block>
   <block>
+    <key>parameter</key>
+    <param>
+      <key>id</key>
+      <value>agc_max</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>AGC Max Gain</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>100</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(820, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_map_bb</key>
+    <param>
+      <key>id</key>
+      <value>gr_map_bb_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>map</key>
+      <value>[48, 49]</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(435, 523)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>id</key>
+      <value>agc_decay</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>AGC Decay Rate</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>0.1</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(682, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_agc2_xx</key>
+    <param>
+      <key>id</key>
+      <value>gr_agc2_xx_0_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>attack_rate</key>
+      <value>agc_attack</value>
+    </param>
+    <param>
+      <key>decay_rate</key>
+      <value>agc_decay</value>
+    </param>
+    <param>
+      <key>reference</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>gain</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>max_gain</key>
+      <value>agc_max</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(299, 191)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_threshold_ff</key>
+    <param>
+      <key>id</key>
+      <value>gr_threshold_ff_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>low</key>
+      <value>threshold_center - threshold_buffer</value>
+    </param>
+    <param>
+      <key>high</key>
+      <value>threshold_center + threshold_buffer</value>
+    </param>
+    <param>
+      <key>init</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(382, 380)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
     <key>gr_file_sink</key>
     <param>
       <key>id</key>
@@ -84,7 +251,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1037, 480)</value>
+      <value>(698, 515)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -92,34 +259,45 @@
     </param>
   </block>
   <block>
-    <key>parameter</key>
+    <key>gr_complex_to_mag</key>
     <param>
       <key>id</key>
-      <value>audio_pass</value>
+      <value>gr_complex_to_mag_0</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>label</key>
-      <value>Audio Pass</value>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(141, 400)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>samp_rate</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
     </param>
     <param>
       <key>value</key>
-      <value>5000</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>eng_float</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
+      <value>64000000</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(796, 132)</value>
+      <value>(183, 11)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -127,181 +305,10 @@
     </param>
   </block>
   <block>
-    <key>parameter</key>
+    <key>band_pass_filter</key>
     <param>
       <key>id</key>
-      <value>audio_stop</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Audio Stop</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>5500</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>eng_float</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(970, 139)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>threshold_mag</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Threshold Magnitude</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>0.25</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>eng_float</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value>m</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(953, 16)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_threshold_ff</key>
-    <param>
-      <key>id</key>
-      <value>gr_threshold_ff_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>low</key>
-      <value>-threshold_mag</value>
-    </param>
-    <param>
-      <key>high</key>
-      <value>threshold_mag</value>
-    </param>
-    <param>
-      <key>init</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(566, 478)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>low_pass_transition_width</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Low Pass Transition Width</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1000</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>eng_float</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value>w</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(773, 18)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>freq_offset</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Frequency Offset</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1000000</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>eng_float</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value>f</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(483, 11)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>low_pass_filter</key>
-    <param>
-      <key>id</key>
-      <value>low_pass_filter_0</value>
+      <value>band_pass_filter_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -321,19 +328,23 @@
     </param>
     <param>
       <key>gain</key>
-      <value>2</value>
+      <value>1</value>
     </param>
     <param>
       <key>samp_rate</key>
       <value>samp_rate</value>
     </param>
     <param>
-      <key>cutoff_freq</key>
-      <value>freq_offset+low_pass_offset</value>
+      <key>low_cutoff_freq</key>
+      <value>freq_offset-bandpass_bandwidth/2</value>
+    </param>
+    <param>
+      <key>high_cutoff_freq</key>
+      <value>freq_offset+bandpass_bandwidth/2</value>
     </param>
     <param>
       <key>width</key>
-      <value>low_pass_transition_width</value>
+      <value>bandpass_transition_width</value>
     </param>
     <param>
       <key>win</key>
@@ -345,7 +356,26 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(496, 250)</value>
+      <value>(515, 167)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_float_to_char</key>
+    <param>
+      <key>id</key>
+      <value>gr_float_to_char_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(147, 527)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -940,7 +970,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(17, 274)</value>
+      <value>(24, 199)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -948,77 +978,34 @@
     </param>
   </block>
   <block>
-    <key>blks2_am_demod_cf</key>
+    <key>parameter</key>
     <param>
       <key>id</key>
-      <value>blks2_am_demod_cf_0</value>
+      <value>freq_offset</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>chan_rate</key>
-      <value>samp_rate</value>
+      <key>label</key>
+      <value>Offset below 915MHz</value>
     </param>
     <param>
-      <key>audio_decim</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>audio_pass</key>
-      <value>5000</value>
-    </param>
-    <param>
-      <key>audio_stop</key>
-      <value>5500</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(283, 469)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_agc2_xx</key>
-    <param>
-      <key>id</key>
-      <value>gr_agc2_xx_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
+      <key>value</key>
+      <value>1000000</value>
     </param>
     <param>
       <key>type</key>
-      <value>complex</value>
+      <value>eng_float</value>
     </param>
     <param>
-      <key>attack_rate</key>
-      <value>1e-1</value>
-    </param>
-    <param>
-      <key>decay_rate</key>
-      <value>1e-2</value>
-    </param>
-    <param>
-      <key>reference</key>
-      <value>1.0</value>
-    </param>
-    <param>
-      <key>gain</key>
-      <value>1.0</value>
-    </param>
-    <param>
-      <key>max_gain</key>
-      <value>0.0</value>
+      <key>short_id</key>
+      <value>f</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(272, 266)</value>
+      <value>(384, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1037,7 +1024,7 @@
     </param>
     <param>
       <key>label</key>
-      <value>Output File (a named pipe)</value>
+      <value>Output File</value>
     </param>
     <param>
       <key>value</key>
@@ -1053,26 +1040,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(312, 11)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_float_to_char</key>
-    <param>
-      <key>id</key>
-      <value>gr_float_to_char_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(795, 498)</value>
+      <value>(272, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1083,7 +1051,7 @@
     <key>parameter</key>
     <param>
       <key>id</key>
-      <value>samp_rate</value>
+      <value>agc_attack</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1091,46 +1059,11 @@
     </param>
     <param>
       <key>label</key>
-      <value>Sample Rate</value>
+      <value>AGC Attack Rate</value>
     </param>
     <param>
       <key>value</key>
-      <value>64000000</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>long</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value>s</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(186, 10)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>low_pass_offset</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Low Pass Offset</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>100</value>
+      <value>0.1</value>
     </param>
     <param>
       <key>type</key>
@@ -1138,11 +1071,151 @@
     </param>
     <param>
       <key>short_id</key>
-      <value>l</value>
+      <value></value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(630, 13)</value>
+      <value>(544, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>id</key>
+      <value>bandpass_transition_width</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Band Pass Filter Transition Width</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1000000</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>w</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(773, 158)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>id</key>
+      <value>bandpass_bandwidth</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Band Pass Filter Bandwidth</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>20</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>b</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(940, 157)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>id</key>
+      <value>threshold_buffer</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Threshold Buffer</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>0.25</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(803, 276)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>id</key>
+      <value>threshold_center</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Threshold Center</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>0.5</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(941, 274)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1150,26 +1223,26 @@
     </param>
   </block>
   <connection>
-    <source_block_id>low_pass_filter_0</source_block_id>
-    <sink_block_id>blks2_am_demod_cf_0</sink_block_id>
+    <source_block_id>gr_float_to_char_0</source_block_id>
+    <sink_block_id>gr_map_bb_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>gr_agc2_xx_0</source_block_id>
-    <sink_block_id>low_pass_filter_0</sink_block_id>
+    <source_block_id>gr_map_bb_0</source_block_id>
+    <sink_block_id>gr_file_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>uhd_usrp_source_0</source_block_id>
-    <sink_block_id>gr_agc2_xx_0</sink_block_id>
+    <sink_block_id>gr_agc2_xx_0_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>blks2_am_demod_cf_0</source_block_id>
-    <sink_block_id>gr_threshold_ff_0</sink_block_id>
+    <source_block_id>gr_agc2_xx_0_0</source_block_id>
+    <sink_block_id>band_pass_filter_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1180,8 +1253,14 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>gr_float_to_char_0</source_block_id>
-    <sink_block_id>gr_file_sink_0</sink_block_id>
+    <source_block_id>gr_complex_to_mag_0</source_block_id>
+    <sink_block_id>gr_threshold_ff_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>band_pass_filter_0</source_block_id>
+    <sink_block_id>gr_complex_to_mag_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

@@ -2,10 +2,9 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Collect
-# Generated: Thu Jul 21 17:36:55 2011
+# Generated: Thu Jul 21 21:14:47 2011
 ##################################################
 
-from gnuradio import blks2
 from gnuradio import eng_notation
 from gnuradio import gr
 from gnuradio import uhd
@@ -15,20 +14,26 @@ from optparse import OptionParser
 
 class collect(gr.top_block):
 
-	def __init__(self, audio_pass=5000, audio_stop=5500, threshold_mag=0.25, low_pass_transition_width=1000, freq_offset=1000000, outfile="datafifo", samp_rate=64000000, low_pass_offset=100):
+	def __init__(self, agc_max=100, agc_decay=0.1, freq_offset=1000000, outfile="datafifo", bandpass_bandwidth=20, threshold_buffer=0.25, threshold_center=0.5, agc_attack=0.1, bandpass_transition_width=1000000):
 		gr.top_block.__init__(self, "Collect")
 
 		##################################################
 		# Parameters
 		##################################################
-		self.audio_pass = audio_pass
-		self.audio_stop = audio_stop
-		self.threshold_mag = threshold_mag
-		self.low_pass_transition_width = low_pass_transition_width
+		self.agc_max = agc_max
+		self.agc_decay = agc_decay
 		self.freq_offset = freq_offset
 		self.outfile = outfile
-		self.samp_rate = samp_rate
-		self.low_pass_offset = low_pass_offset
+		self.bandpass_bandwidth = bandpass_bandwidth
+		self.threshold_buffer = threshold_buffer
+		self.threshold_center = threshold_center
+		self.agc_attack = agc_attack
+		self.bandpass_transition_width = bandpass_transition_width
+
+		##################################################
+		# Variables
+		##################################################
+		self.samp_rate = samp_rate = 64000000
 
 		##################################################
 		# Blocks
@@ -42,63 +47,47 @@ class collect(gr.top_block):
 		self.uhd_usrp_source_0.set_center_freq(915000000 - freq_offset, 0)
 		self.uhd_usrp_source_0.set_gain(0, 0)
 		self.uhd_usrp_source_0.set_antenna("TX/RX", 0)
-		self.low_pass_filter_0 = gr.fir_filter_ccf(1, firdes.low_pass(
-			2, samp_rate, freq_offset+low_pass_offset, low_pass_transition_width, firdes.WIN_HAMMING, 6.76))
-		self.gr_threshold_ff_0 = gr.threshold_ff(-threshold_mag, threshold_mag, 0)
+		self.gr_threshold_ff_0 = gr.threshold_ff(threshold_center - threshold_buffer, threshold_center + threshold_buffer, 0)
+		self.gr_map_bb_0 = gr.map_bb(([48, 49]))
 		self.gr_float_to_char_0 = gr.float_to_char()
 		self.gr_file_sink_0 = gr.file_sink(gr.sizeof_char*1, outfile)
 		self.gr_file_sink_0.set_unbuffered(False)
-		self.gr_agc2_xx_0 = gr.agc2_cc(1e-1, 1e-2, 1.0, 1.0, 0.0)
-		self.blks2_am_demod_cf_0 = blks2.am_demod_cf(
-			channel_rate=samp_rate,
-			audio_decim=1,
-			audio_pass=5000,
-			audio_stop=5500,
-		)
+		self.gr_complex_to_mag_0 = gr.complex_to_mag(1)
+		self.gr_agc2_xx_0_0 = gr.agc2_cc(agc_attack, agc_decay, 1.0, 1.0, agc_max)
+		self.band_pass_filter_0 = gr.fir_filter_ccf(1, firdes.band_pass(
+			1, samp_rate, freq_offset-bandpass_bandwidth/2, freq_offset+bandpass_bandwidth/2, bandpass_transition_width, firdes.WIN_HAMMING, 6.76))
 
 		##################################################
 		# Connections
 		##################################################
-		self.connect((self.low_pass_filter_0, 0), (self.blks2_am_demod_cf_0, 0))
-		self.connect((self.gr_agc2_xx_0, 0), (self.low_pass_filter_0, 0))
-		self.connect((self.uhd_usrp_source_0, 0), (self.gr_agc2_xx_0, 0))
-		self.connect((self.blks2_am_demod_cf_0, 0), (self.gr_threshold_ff_0, 0))
+		self.connect((self.gr_float_to_char_0, 0), (self.gr_map_bb_0, 0))
+		self.connect((self.gr_map_bb_0, 0), (self.gr_file_sink_0, 0))
+		self.connect((self.uhd_usrp_source_0, 0), (self.gr_agc2_xx_0_0, 0))
+		self.connect((self.gr_agc2_xx_0_0, 0), (self.band_pass_filter_0, 0))
 		self.connect((self.gr_threshold_ff_0, 0), (self.gr_float_to_char_0, 0))
-		self.connect((self.gr_float_to_char_0, 0), (self.gr_file_sink_0, 0))
+		self.connect((self.gr_complex_to_mag_0, 0), (self.gr_threshold_ff_0, 0))
+		self.connect((self.band_pass_filter_0, 0), (self.gr_complex_to_mag_0, 0))
 
-	def get_audio_pass(self):
-		return self.audio_pass
+	def get_agc_max(self):
+		return self.agc_max
 
-	def set_audio_pass(self, audio_pass):
-		self.audio_pass = audio_pass
+	def set_agc_max(self, agc_max):
+		self.agc_max = agc_max
+		self.gr_agc2_xx_0_0.set_max_gain(self.agc_max)
 
-	def get_audio_stop(self):
-		return self.audio_stop
+	def get_agc_decay(self):
+		return self.agc_decay
 
-	def set_audio_stop(self, audio_stop):
-		self.audio_stop = audio_stop
-
-	def get_threshold_mag(self):
-		return self.threshold_mag
-
-	def set_threshold_mag(self, threshold_mag):
-		self.threshold_mag = threshold_mag
-		self.gr_threshold_ff_0.set_hi(self.threshold_mag)
-		self.gr_threshold_ff_0.set_lo(-self.threshold_mag)
-
-	def get_low_pass_transition_width(self):
-		return self.low_pass_transition_width
-
-	def set_low_pass_transition_width(self, low_pass_transition_width):
-		self.low_pass_transition_width = low_pass_transition_width
-		self.low_pass_filter_0.set_taps(firdes.low_pass(2, self.samp_rate, self.freq_offset+self.low_pass_offset, self.low_pass_transition_width, firdes.WIN_HAMMING, 6.76))
+	def set_agc_decay(self, agc_decay):
+		self.agc_decay = agc_decay
+		self.gr_agc2_xx_0_0.set_decay_rate(self.agc_decay)
 
 	def get_freq_offset(self):
 		return self.freq_offset
 
 	def set_freq_offset(self, freq_offset):
 		self.freq_offset = freq_offset
-		self.low_pass_filter_0.set_taps(firdes.low_pass(2, self.samp_rate, self.freq_offset+self.low_pass_offset, self.low_pass_transition_width, firdes.WIN_HAMMING, 6.76))
+		self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.freq_offset-self.bandpass_bandwidth/2, self.freq_offset+self.bandpass_bandwidth/2, self.bandpass_transition_width, firdes.WIN_HAMMING, 6.76))
 		self.uhd_usrp_source_0.set_center_freq(915000000 - self.freq_offset, 0)
 
 	def get_outfile(self):
@@ -107,41 +96,73 @@ class collect(gr.top_block):
 	def set_outfile(self, outfile):
 		self.outfile = outfile
 
+	def get_bandpass_bandwidth(self):
+		return self.bandpass_bandwidth
+
+	def set_bandpass_bandwidth(self, bandpass_bandwidth):
+		self.bandpass_bandwidth = bandpass_bandwidth
+		self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.freq_offset-self.bandpass_bandwidth/2, self.freq_offset+self.bandpass_bandwidth/2, self.bandpass_transition_width, firdes.WIN_HAMMING, 6.76))
+
+	def get_threshold_buffer(self):
+		return self.threshold_buffer
+
+	def set_threshold_buffer(self, threshold_buffer):
+		self.threshold_buffer = threshold_buffer
+		self.gr_threshold_ff_0.set_hi(self.threshold_center + self.threshold_buffer)
+		self.gr_threshold_ff_0.set_lo(self.threshold_center - self.threshold_buffer)
+
+	def get_threshold_center(self):
+		return self.threshold_center
+
+	def set_threshold_center(self, threshold_center):
+		self.threshold_center = threshold_center
+		self.gr_threshold_ff_0.set_hi(self.threshold_center + self.threshold_buffer)
+		self.gr_threshold_ff_0.set_lo(self.threshold_center - self.threshold_buffer)
+
+	def get_agc_attack(self):
+		return self.agc_attack
+
+	def set_agc_attack(self, agc_attack):
+		self.agc_attack = agc_attack
+		self.gr_agc2_xx_0_0.set_attack_rate(self.agc_attack)
+
+	def get_bandpass_transition_width(self):
+		return self.bandpass_transition_width
+
+	def set_bandpass_transition_width(self, bandpass_transition_width):
+		self.bandpass_transition_width = bandpass_transition_width
+		self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.freq_offset-self.bandpass_bandwidth/2, self.freq_offset+self.bandpass_bandwidth/2, self.bandpass_transition_width, firdes.WIN_HAMMING, 6.76))
+
 	def get_samp_rate(self):
 		return self.samp_rate
 
 	def set_samp_rate(self, samp_rate):
 		self.samp_rate = samp_rate
-		self.low_pass_filter_0.set_taps(firdes.low_pass(2, self.samp_rate, self.freq_offset+self.low_pass_offset, self.low_pass_transition_width, firdes.WIN_HAMMING, 6.76))
+		self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.freq_offset-self.bandpass_bandwidth/2, self.freq_offset+self.bandpass_bandwidth/2, self.bandpass_transition_width, firdes.WIN_HAMMING, 6.76))
 		self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
-
-	def get_low_pass_offset(self):
-		return self.low_pass_offset
-
-	def set_low_pass_offset(self, low_pass_offset):
-		self.low_pass_offset = low_pass_offset
-		self.low_pass_filter_0.set_taps(firdes.low_pass(2, self.samp_rate, self.freq_offset+self.low_pass_offset, self.low_pass_transition_width, firdes.WIN_HAMMING, 6.76))
 
 if __name__ == '__main__':
 	parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
-	parser.add_option("", "--audio-pass", dest="audio_pass", type="eng_float", default=eng_notation.num_to_str(5000),
-		help="Set Audio Pass [default=%default]")
-	parser.add_option("", "--audio-stop", dest="audio_stop", type="eng_float", default=eng_notation.num_to_str(5500),
-		help="Set Audio Stop [default=%default]")
-	parser.add_option("-m", "--threshold-mag", dest="threshold_mag", type="eng_float", default=eng_notation.num_to_str(0.25),
-		help="Set Threshold Magnitude [default=%default]")
-	parser.add_option("-w", "--low-pass-transition-width", dest="low_pass_transition_width", type="eng_float", default=eng_notation.num_to_str(1000),
-		help="Set Low Pass Transition Width [default=%default]")
+	parser.add_option("", "--agc-max", dest="agc_max", type="eng_float", default=eng_notation.num_to_str(100),
+		help="Set AGC Max Gain [default=%default]")
+	parser.add_option("", "--agc-decay", dest="agc_decay", type="eng_float", default=eng_notation.num_to_str(0.1),
+		help="Set AGC Decay Rate [default=%default]")
 	parser.add_option("-f", "--freq-offset", dest="freq_offset", type="eng_float", default=eng_notation.num_to_str(1000000),
-		help="Set Frequency Offset [default=%default]")
+		help="Set Offset below 915MHz [default=%default]")
 	parser.add_option("-o", "--outfile", dest="outfile", type="string", default="datafifo",
-		help="Set Output File (a named pipe) [default=%default]")
-	parser.add_option("-s", "--samp-rate", dest="samp_rate", type="long", default=64000000,
-		help="Set Sample Rate [default=%default]")
-	parser.add_option("-l", "--low-pass-offset", dest="low_pass_offset", type="eng_float", default=eng_notation.num_to_str(100),
-		help="Set Low Pass Offset [default=%default]")
+		help="Set Output File [default=%default]")
+	parser.add_option("", "--bandpass-bandwidth", dest="bandpass_bandwidth", type="eng_float", default=eng_notation.num_to_str(20),
+		help="Set Band Pass Filter Bandwidth [default=%default]")
+	parser.add_option("", "--threshold-buffer", dest="threshold_buffer", type="eng_float", default=eng_notation.num_to_str(0.25),
+		help="Set Threshold Buffer [default=%default]")
+	parser.add_option("", "--threshold-center", dest="threshold_center", type="eng_float", default=eng_notation.num_to_str(0.5),
+		help="Set Threshold Center [default=%default]")
+	parser.add_option("", "--agc-attack", dest="agc_attack", type="eng_float", default=eng_notation.num_to_str(0.1),
+		help="Set AGC Attack Rate [default=%default]")
+	parser.add_option("-w", "--bandpass-transition-width", dest="bandpass_transition_width", type="eng_float", default=eng_notation.num_to_str(1000000),
+		help="Set Band Pass Filter Transition Width [default=%default]")
 	(options, args) = parser.parse_args()
-	tb = collect(audio_pass=options.audio_pass, audio_stop=options.audio_stop, threshold_mag=options.threshold_mag, low_pass_transition_width=options.low_pass_transition_width, freq_offset=options.freq_offset, outfile=options.outfile, samp_rate=options.samp_rate, low_pass_offset=options.low_pass_offset)
+	tb = collect(agc_max=options.agc_max, agc_decay=options.agc_decay, freq_offset=options.freq_offset, outfile=options.outfile, bandpass_bandwidth=options.bandpass_bandwidth, threshold_buffer=options.threshold_buffer, threshold_center=options.threshold_center, agc_attack=options.agc_attack, bandpass_transition_width=options.bandpass_transition_width)
 	tb.start()
 	raw_input('Press Enter to quit: ')
 	tb.stop()

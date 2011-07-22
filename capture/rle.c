@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     }
     
     int fd;
-    fd = open(argv[1],O_RDONLY);
+    fd = open(argv[1], O_RDONLY);
     if (fd < 0) {
         perror("cannot open input file");
         exit(errno);
@@ -49,6 +49,6 @@ int main(int argc, char **argv) {
             count = 1;
         }
     }
-    //Do we want a trailing newline?
+    //Do we want this trailing newline?
     printf("%c %u\n", last, count);
 }
