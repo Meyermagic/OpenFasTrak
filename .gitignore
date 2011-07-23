@@ -2,6 +2,6 @@
 
 
 
-communication/rle
-communication/expand
-communication/debounce
+realtime/rle
+realtime/expand
+realtime/debounce
