@@ -7,21 +7,21 @@ FasTrak is [notably insecure](http://rdist.root.org/2008/08/07/fastrak-talk-summ
 OpenFasTrak is currently tested on the [Ettus E100 USRP](http://www.ettus.com/products), but should work with any USRP equipped with a daughterboard capable of transmitting and receiving at around 915MHz.
 
 ## Components
-* rle.c
+* rle.c: 
 Run-length encodes data from stdin or a file. Format is "[char] [count]", one per line.
-* debounce.c
+* debounce.c: 
 Debounces run-length encoded data, dropping runs shorter than a number of samples specified as an argument. DOESN'T merge runs of the same character around a dropped run.
-* expand.c
+* expand.c: 
 Reverses the run-length encoding performed by rle.c.
-* map.c
+* map.c: 
 Switches between the bytes 0x00, 0x01 and ASCII "0" and "1".
-* pack.c
+* pack.c: 
 Packs a series of eight 0x00 and 0x01 bytes into single bytes. Ignores any extra trailing bits.
-* unpack.c
+* unpack.c: 
 Expands a bytes into sequences of eight 0x00 and 0x01 bytes, each representing a single bit.
-* binnnum.c
+* binnnum.c: 
 Takes a single unsigned 16-bit decimal integer argument, outputs two bytes from the MSB and LSB of the 16-bit number.
-* crc.c
+* crc.c: 
 Computes the CRC-16-CCITT of data from the stdin. Uses initial value 0x0000 rather than 0xFFFF, as per FasTrak's implementation.
 
 ## Helpful Reading
