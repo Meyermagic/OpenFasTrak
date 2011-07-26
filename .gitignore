@@ -6,3 +6,6 @@ realtime/rle
 realtime/expand
 realtime/debounce
 realtime/crc
+realtime/map
+realtime/unpack
+realtime/pack
