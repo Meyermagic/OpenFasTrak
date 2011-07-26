@@ -1,4 +1,4 @@
-//Run-length encodes data from a file, outputs to stdout.
+//Run-length encodes data from a file or stdin, outputs to stdout.
 //By Meyer S. Jacobs
 //Tested with GCC 4.6.1
 //gcc rle.c -O2 -o rle
@@ -10,17 +10,22 @@
 #include <fcntl.h>
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        //Should we fallback to stdin here instead of erroring out?
-        fprintf(stderr, "Usage: %s inputfilename\n", argv[0]);
+    if (argc > 2) {
+        fprintf(stderr, "Usage: %s [inputfilename]\n", argv[0]);
         exit(1);
     }
     
     int fd;
-    fd = open(argv[1], O_RDONLY);
-    if (fd < 0) {
-        perror("cannot open input file");
-        exit(errno);
+    if (argc == 2) {
+        fd = open(argv[1], O_RDONLY);
+        if (fd < 0) {
+            perror("cannot open input file");
+            exit(errno);
+        }
+    
+    }
+    else {
+        fd = 0;
     }
     
     char last;
