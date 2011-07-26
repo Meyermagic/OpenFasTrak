@@ -28,7 +28,7 @@ uint16_t crc16_compute(uint8_t data, uint16_t init) {
 int main() {
     unsigned char c; 
     int retval = scanf("%c", &c);
-    //Initial value
+    //Initial value (0x0000 for the nonstandard FasTrak CRC16)
     uint16_t crc = 0x0000;
     while (retval == 1) {
         //printf("%x %c\n", crc, c);
